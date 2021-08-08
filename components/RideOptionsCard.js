@@ -46,7 +46,7 @@ const RideOptionsCard = () => {
                     <Icon name='chevron-left' type='fontawesome' />
                 </TouchableOpacity>    
                 <Text style={tw`text-center py-5 text-xl`}>
-                    Select a Ride - { travelTimeInfo?.distance.text }
+                    Select a Ride - { travelTimeInfo?.distance?.text }
                 </Text>
             </View>
 
@@ -64,10 +64,10 @@ const RideOptionsCard = () => {
                         />
                         <View style={tw`-ml-6 `}>
                             <Text style={tw`font-semibold text-xl`}>{option.title}</Text>
-                            <Text style={tw`text-gray-500`}>{travelTimeInfo?.duration.text} Travel Time</Text>
+                            <Text style={tw`text-gray-500`}>{travelTimeInfo?.duration?.text} Travel Time</Text>
                         </View>
                         <NumberFormat
-                            value={(travelTimeInfo?.duration.value * SURGE_CHARGE_RATE * option.multiplier) / 100}
+                            value={(travelTimeInfo?.duration?.value * SURGE_CHARGE_RATE * option.multiplier) / 100}
                             displayType={'text'}
                             thousandSeparator={true}
                             decimalScale={2}
