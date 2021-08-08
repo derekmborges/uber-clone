@@ -2,7 +2,11 @@ import { useNavigation } from '@react-navigation/core'
 import React, { useState } from 'react'
 import { FlatList, Image, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { Icon } from 'react-native-elements/dist/icons/Icon'
+import NumberFormat from 'react-number-format'
+import { useSelector } from 'react-redux'
 import tw from 'tailwind-react-native-classnames'
+
+import { selectTravelTimeInfo } from '../slices/navSlice'
 
 const data = [
     {
@@ -25,9 +29,13 @@ const data = [
     },
 ]
 
+// If there is SURGE pricing, this increases
+const SURGE_CHARGE_RATE = 1.5
+
 const RideOptionsCard = () => {
     const navigation = useNavigation()
     const [selected, setSelected] = useState(null)
+    const travelTimeInfo = useSelector(selectTravelTimeInfo)
 
     return (
         <SafeAreaView style={tw`bg-white flex-grow`}>
@@ -38,32 +46,39 @@ const RideOptionsCard = () => {
                     <Icon name='chevron-left' type='fontawesome' />
                 </TouchableOpacity>    
                 <Text style={tw`text-center py-5 text-xl`}>
-                    Select a Ride
+                    Select a Ride - { travelTimeInfo?.distance.text }
                 </Text>
             </View>
 
             <FlatList
                 data={data}
-                keyExtractor={(item) => item.id}
-                renderItem={({item}) => (
+                keyExtractor={(option) => option.id}
+                renderItem={({item: option}) => (
                     <TouchableOpacity
-                        onPress={() => setSelected(item)}
+                        onPress={() => setSelected(option)}
                         style={tw`flex-row items-center justify-between px-10
-                                ${item.id === selected?.id && "bg-gray-200"}`}>
+                                ${option.id === selected?.id && "bg-gray-200"}`}>
                         <Image
                             style={{ width: 100, height: 100, resizeMode: 'contain' }}
-                            source={{ uri: item.image }}
+                            source={{ uri: option.image }}
                         />
                         <View style={tw`-ml-6 `}>
-                            <Text style={tw`font-semibold text-xl`}>{item.title}</Text>
-                            <Text style={tw`text-gray-500`}>Travel Time</Text>
+                            <Text style={tw`font-semibold text-xl`}>{option.title}</Text>
+                            <Text style={tw`text-gray-500`}>{travelTimeInfo?.duration.text} Travel Time</Text>
                         </View>
-                        <Text style={tw`text-xl`}>$99</Text>
+                        <NumberFormat
+                            value={(travelTimeInfo?.duration.value * SURGE_CHARGE_RATE * option.multiplier) / 100}
+                            displayType={'text'}
+                            thousandSeparator={true}
+                            decimalScale={2}
+                            prefix={'$'}
+                            renderText={(value) => <Text style={tw`text-xl`}>{value}</Text>}
+                        />
                     </TouchableOpacity>
                 )}
             />
 
-            <View>
+            <View style={tw`mt-auto border-t border-gray-200`}>
                 <TouchableOpacity
                     disabled={!selected}
                     style={tw`bg-black py-3 m-3 ${!selected && 'bg-gray-300'}`}>
