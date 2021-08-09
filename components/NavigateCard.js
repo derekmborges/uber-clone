@@ -3,16 +3,17 @@ import { SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-na
 import tw from 'tailwind-react-native-classnames'
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete'
 import { GOOGLE_MAPS_APIKEY } from '@env'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { useNavigation } from '@react-navigation/core'
 
-import { setDestination } from '../slices/navSlice'
+import { selectDestination, setDestination } from '../slices/navSlice'
 import NavFavorites from './NavFavorites'
 import { Icon } from 'react-native-elements'
 
 const NavigateCard = () => {
     const dispatch = useDispatch()
     const navigation = useNavigation()
+    const destination = useSelector(selectDestination)
 
     return (
         <SafeAreaView style={tw`bg-white flex-1`}>
@@ -44,12 +45,17 @@ const NavigateCard = () => {
                     />
                 </View>
 
-                <NavFavorites />
+                <NavFavorites side='destination' />
             </View>
 
             <View style={tw`flex-row bg-white justify-evenly py-2 mt-auto border-t border-gray-100`}>
                 <TouchableOpacity
-                    onPress={() => navigation.navigate('RideOptionsCard')}
+                    onPress={() => {
+                        if (destination)
+                            navigation.navigate('RideOptionsCard')
+                        else
+                            alert('Select destination first')
+                    }}
                     style={tw`flex flex-row justify-between bg-black w-24 px-4 py-3 rounded-full`}>
                     <Icon name='car' type='font-awesome' color='white' size={16} />
                     <Text style={tw`text-white text-center`}>Rides</Text>

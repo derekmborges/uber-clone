@@ -1,5 +1,5 @@
 import React from 'react'
-import { StyleSheet, View, SafeAreaView, Image } from 'react-native'
+import { View, SafeAreaView, Image } from 'react-native'
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete'
 import tw from 'tailwind-react-native-classnames'
 import NavOptions from '../components/NavOptions'
@@ -52,16 +52,10 @@ const HomeScreen = () => {
                 />
 
                 <NavOptions />
-                <NavFavorites />
+                <NavFavorites side='origin' />
             </View>
         </SafeAreaView>
     )
 }
 
 export default HomeScreen
-
-const styles = StyleSheet.create({
-    text: {
-        color: 'blue'
-    }
-})

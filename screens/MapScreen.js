@@ -1,5 +1,5 @@
 import React from 'react'
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { StyleSheet, TouchableOpacity, View } from 'react-native'
 import tw from 'tailwind-react-native-classnames'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 
@@ -17,7 +17,9 @@ const MapScreen = () => {
         <View>
 
             <TouchableOpacity
-                onPress={() => navigation.navigate('HomeScreen')}
+                onPress={() => {
+                    navigation.navigate('HomeScreen')}
+                }
                 style={tw`bg-gray-100 absolute top-14 left-4 z-50 p-3 rounded-full shadow-lg`}>
                 <Icon name='menu' />
             </TouchableOpacity>
